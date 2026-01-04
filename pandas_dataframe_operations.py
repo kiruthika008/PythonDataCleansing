@@ -26,24 +26,32 @@ df.head()
 
 df['Date of Publication'].head(25)
 
-unwanted_characters = ['[', ',', '-',']','?']
+unwanted_characters = ['[', ',', '-',']','?',' ']
 
-def clean_dates(row):
+
+def clean_dates_other(row):
     dop= str(row['Date of Publication']).strip()
-    
+    print(dop)
     if dop == 'nan' or dop[0] == '[':
         return np.nan
-    
-    for character in unwanted_characters:
-        if character in dop:
-            print(f"{dop} before")
-            character_index = dop.find(character)
-            dop = dop[:character_index]
-            print(f"{dop} after")
-    
-    return dop
+    else:
+        split_list = [i for i in dop]
+        print(split_list)
+        for i in split_list:
+            if i in unwanted_characters:
+                character_index = split_list.index(i)  # to find index of value i for list if strings use find(i)
+                print(character_index)
+                dop = dop[:character_index]
+                break
+        print(f"{dop} after")
+        return dop
 
-df['Date of Publication'] = df.apply(clean_dates, axis = 1)
+df['Date of Publication'] = df.apply(clean_dates_other, axis = 1)
+df['Date of Publication'].to_csv(f"{os.getcwd()}/data/output.csv")
+
+
+
+
 
 
 
